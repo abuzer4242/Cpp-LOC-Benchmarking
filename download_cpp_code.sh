@@ -5,7 +5,7 @@ OUTPUT_DIR="Simple"
 mkdir -p "$OUTPUT_DIR"
 
 # استعلام GitHub API لجلب ملفات C++ فقط
-REPO="your_username/your_repository"  # استبدل باسم المستودع الفعلي
+REPO="abuzer4242/Cpp-LOC-Benchmarking"  # تأكد من أنه المستودع الصحيح
 BRANCH="main"
 FILES=$(gh api repos/$REPO/git/trees/$BRANCH?recursive=1 | jq -r '.tree[] | select(.type=="blob") | .path')
 
