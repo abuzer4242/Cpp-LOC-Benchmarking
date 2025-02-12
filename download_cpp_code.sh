@@ -1,44 +1,30 @@
 #!/bin/bash
 
-# مجلد التخزين
-TARGET_DIR="Simple"
-mkdir -p "$TARGET_DIR"
+# الدليل الذي سيتم حفظ الأكواد فيه
+OUTPUT_DIR="Simple"
+mkdir -p "$OUTPUT_DIR"
 
-# البحث عن أكواد C++ عبر GitHub CLI
-gh search code --language C++ --limit 50 --json path,repository,url > results.json
+# استعلام GitHub API لجلب ملفات C++ فقط
+REPO="your_username/your_repository"  # استبدل باسم المستودع الفعلي
+BRANCH="main"
+FILES=$(gh api repos/$REPO/git/trees/$BRANCH?recursive=1 | jq -r '.tree[] | select(.type=="blob") | .path')
 
-# قراءة JSON وجلب الأكواد
-jq -c '.[]' results.json | while read -r line; do
-    FILE_URL=$(echo $line | jq -r '.url')
+# تحميل كل ملف والتحقق من امتداده
+echo "$FILES" | while read -r line; do
+    # استخراج اسم الملف وإزالة الأحرف غير المرغوبة
     FILE_NAME=$(basename "$(echo $line | jq -r '.path')" | tr -d '[:space:]/\\:*?"<>|')
-    REPO_NAME=$(echo $line | jq -r '.repository.name')
-    REPO_OWNER=$(echo $line | jq -r '.repository.owner')
 
-    # إنشاء مسار الحفظ
-    SAVE_PATH="$TARGET_DIR/${REPO_OWNER}_${REPO_NAME}_$FILE_NAME"
-
-    # تنزيل الكود
-    curl -sL "$FILE_URL" -o "$SAVE_PATH"
-
-    # التحقق مما إذا كان الملف تم تنزيله بنجاح
-    if [ ! -f "$SAVE_PATH" ]; then
-        echo "❌ فشل في تنزيل الملف: $FILE_NAME"
+    # التحقق من أن الملف ينتهي بـ .cpp فقط
+    if [[ "$FILE_NAME" != *.cpp ]]; then
+        echo "⚠️ تخطي الملف غير المناسب: $FILE_NAME"
         continue
     fi
 
-    # حساب عدد الأسطر
-    LINE_COUNT=$(wc -l < "$SAVE_PATH")
+    # تنزيل الملف إلى الدليل المطلوب
+    FILE_URL="https://raw.githubusercontent.com/$REPO/$BRANCH/$line"
+    curl -s "$FILE_URL" -o "$OUTPUT_DIR/$FILE_NAME"
 
-    # تصنيف الملفات حسب عدد الأسطر
-    if [ "$LINE_COUNT" -le 100 ]; then
-        echo "✅ حفظ الملف: $SAVE_PATH ($LINE_COUNT سطر)"
-    else
-        echo "❌ تجاوز الحد (> $LINE_COUNT سطر)، حذف الملف"
-        rm "$SAVE_PATH"
-    fi
+    echo "✅ تم تنزيل الملف: $FILE_NAME"
 done
 
-# إضافة الملفات إلى المستودع
-git add Simple/
-git commit -m "Added C++ codes with LOC ≤ 100"
-git push origin main
+echo "🎉 تم الانتهاء من تنزيل جميع ملفات C++ بنجاح!"
