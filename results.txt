@@ -1,0 +1,54 @@
+pimoroni/pico-boilerplate:main.cpp: int main() {
+selfboot/CS_Offer:Coding/Linux_OS_Daemon.cpp: int main(int argc, char *argv[])
+anuj2054/BattleZoneX:MAIN.CPP: int main()
+hjalti/gagnaskipan-lectures:week12/code/exam2011/6/main.cpp: int main()
+MohamedAbdelhakam/self-diagnosis:sp-main (1)/sp-main/3.cp: int main()
+SoftGoat/Data-structure:ex1/main24b1.cpp: int main()
+DPrinceKumar/HacktoberFest2020-1:Anagram.cpp: int main()
+amanss00/ForNewbies:worstfit.cpp: int main()
+wfus/WebAssembly-Taint:d8.h: static int RunMain(Isolate* isolate, int argc, char* argv[], bool last_run);
+wfus/WebAssembly-Taint:d8.h: static int Main(int argc, char* argv[]);
+anubhavmaheshwari0805/HPCLAB:02.cpp: void main() {
+comp0zr/Project-Euler-Solutions:08_Largest-product-in-a-series.cpp: int main()
+keewon/winter-source-beta-3:UI.h: int Main(HWND hWnd, MSG message);
+Noconfiesenmiscodigos/IOE-Numerical-Methods-Lab-Code-Solutions:C++/29.cpp: int main()
+siuoly/Language_speed_comparsion:a.cc: int main(int argc ,char **argv){
+Imrann-Khan/CP-Codes:1.cpp: int main(){
+yoonseokham/algorithm:BOJ2565.cpp: int main(void){
+Nayeem123/OS_PROJECT:round robin.cpp: int main()
+Nayeem123/OS_PROJECT:round robin.cpp: int count,j,n,time,remain,flag=0,time_quantum;
+bdthanh/Kattis:congaline.cpp: int main() {
+SizhouNN/noc_P1_Q1:pe.h: void main() // specify the functionality of PE per clock cycle
+chamrun/IUTCPC:i.cpp: int main()
+iamtraction/forkbombs:cpp.cpp: int main(void) {
+ghulamyazdani/c-c-atom:PALIN.CPP: void main()
+Saviour1001/C--_Codes:comp1.cpp: int main() {
+PranavBhosale1/pb1905:3.cpp: int main() {
+Hirossss/BashScripts:BashS/lab4 PAMIEC/helloworld.cc: int main() {
+Gurukandukuri/csa5165--cryptography-192211596:crypto 27.cpp: int main() {
+rutujaaaa20/25-Day-C-coding-Challenge-:To calculate standard deviation.cpp: int main() {
+Hardikmaind/prac8:hpc/ASS2B.cpp: int main(){
+rutujaaaa20/25-Day-C-coding-Challenge-:Program to Convert Decimal to Octal.cpp: int main() {
+Wraient/college:CG/experiment_3.cpp: int main()
+SahilSRP123/Car-Game:CarGame.cpp: int main()
+noorulhuda789/week2pd-pf:task5.cpp: main()
+SLIIT-FacultyOfComputing/tutorial-07b-IT21281396:Exercise01.cpp: int main() {
+Vict0r-Chen/CPlusPlus.Lab:1.cc: int main(){
+takshinyaa/C:v.cp: int main()
+ArhumJain/Advent-of-Code-2024:Day 13/clawP2.cpp: F f(TEST == 1 ? "test.in" : "main.in");
+ArhumJain/Advent-of-Code-2024:Day 13/clawP2.cpp: int main() {
+banarun/CodeRunner:14.h: int main( int argc, char* argv[] )
+fungos/cr:cr.h: #### `int (*cr_main)(struct cr_plugin *ctx, enum cr_op operation)`
+fungos/cr:cr.h: static int cr_plugin_main(cr_plugin &ctx, cr_op operation) {
+imvijayrao/LLD2023:.cpp: int main()
+kazusa3e/kamacoder-solutions:4.cc: int main(int, char const *[]) {
+wuzhouhui/leetcode5th:2.cc: int main(void){}
+dmah42/evernote:1.cc: int main(int argc, const char* argv[]) {
+taichunmin/uva:AC/10812.cpp: int main()
+Noconfiesenmiscodigos/IOE-Operating-System-Lab-Code-Solutions:Lab 3/3.5.cpp: int main()
+rakib151p/CodeForces_Solution:Untitled-1.cpp: int main(){
+MEHDI-HAMDI-Yousra-2326076aa/mastermind:main (2).cpp: int main()
+noorulhuda789/week-3:task9.cpp: main()
+harshitjha1430/LAB-1B:q3_word_frequency.cpp: int main(){
+kazusa3e/kamacoder-solutions:3.cc: int main(int, char const *[]) {
+lk-2009/cpp-h1:.cpp: int main()
