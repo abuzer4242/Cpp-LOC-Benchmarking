@@ -382,6 +382,127 @@ protected:
         m_timer.stop();
     }
 
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+#include <iostream>
+
+using namespace cv;
+using namespace std;
+
+// تطبيق مجموعة من التأثيرات على الصورة
+void applyEffects(Mat& img)
+{
+    Mat gray, edges, blurred, sharpened;
+    
+    // تحويل الصورة إلى التدرج الرمادي
+    cvtColor(img, gray, COLOR_BGR2GRAY);
+    
+    // تطبيق كشف الحواف
+    Canny(gray, edges, 50, 150);
+    
+    // تطبيق تمويه Gaussian
+    GaussianBlur(img, blurred, Size(15, 15), 0);
+    
+    // تطبيق زيادة الحدة
+    Mat kernel = (Mat_<float>(3, 3) << 
+                   -1, -1, -1, 
+                   -1, 9, -1, 
+                   -1, -1, -1);
+    filter2D(img, sharpened, img.depth(), kernel);
+    
+    // دمج الصور في نافذة واحدة للعرض
+    Mat combined;
+    hconcat(img, blurred, combined);
+    hconcat(combined, sharpened, combined);
+    
+    // عرض النتائج
+    imshow("Image Effects", combined);
+}
+
+int main()
+{
+    VideoCapture cap(0);
+    if (!cap.isOpened())
+    {
+        cout << "Error: Cannot open webcam" << endl;
+        return -1;
+    }
+    
+    Mat frame;
+    while (true)
+    {
+        cap >> frame;
+        if (frame.empty())
+            break;
+        
+        applyEffects(frame);
+        
+        if (waitKey(30) == 27) // خروج عند الضغط على ESC
+            break;
+    }
+    
+    cap.release();
+    destroyAllWindows();
+    return 0;
+}
+#include "opencv2/opencv.hpp"
+#include <iostream>
+#include <chrono>
+
+using namespace cv;
+using namespace std;
+using namespace std::chrono;
+
+void displayFPS(VideoCapture& cap)
+{
+    int frameCount = 0;
+    auto start = high_resolution_clock::now();
+    Mat frame;
+    
+    while (true)
+    {
+        cap >> frame;
+        if (frame.empty())
+            break;
+        
+        frameCount++;
+        
+        // حساب الزمن المنقضي
+        auto end = high_resolution_clock::now();
+        duration<double> elapsed = end - start;
+        
+        if (elapsed.count() >= 1.0) // تحديث الـ FPS كل ثانية
+        {
+            int fps = frameCount / elapsed.count();
+            string fpsText = "FPS: " + to_string(fps);
+            putText(frame, fpsText, Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
+            frameCount = 0;
+            start = high_resolution_clock::now();
+        }
+        
+        imshow("Video FPS", frame);
+        
+        if (waitKey(30) == 27)
+            break;
+    }
+}
+
+int main()
+{
+    VideoCapture cap(0);
+    if (!cap.isOpened())
+    {
+        cout << "Error: Cannot open webcam" << endl;
+        return -1;
+    }
+    
+    displayFPS(cap);
+    
+    cap.release();
+    destroyAllWindows();
+    return 0;
+}
+
 #if defined(_WIN32)
     int setup_pixel_format()
     {
