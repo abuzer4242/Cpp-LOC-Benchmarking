@@ -1,1 +1,8 @@
-OpenCV Background Removal\n\nThis C++ program utilizes OpenCV and CUDA to perform real-time background subtraction using Gaussian Mixture Models (MOG and MOG2). It processes video frames from a file or camera, applies background subtraction, and displays the original frame, foreground mask, and extracted foreground. GPU acceleration enhances performance when available.
+This C++ program utilizes OpenCV with CUDA support to perform real-time face detection using Haar cascades. It supports both CPU and GPU processing, allowing users to toggle between them dynamically. The program accepts image, video, or camera input and applies face detection using either OpenCV’s standard CascadeClassifier (CPU) or cuda::CascadeClassifier (GPU).
+
+Features:
+- Supports real-time face detection with OpenCV.
+- Uses CUDA acceleration for faster processing on compatible GPUs.
+- Allows dynamic switching between CPU and GPU modes.
+- Provides various configuration options, including face filtering and multi-face detection.
+- Displays detected faces and FPS performance in a GUI window.
