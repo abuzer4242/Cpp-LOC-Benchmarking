@@ -26,6 +26,628 @@
 #include "opencv2/videoio.hpp"
 
 #include "winapp.hpp"
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <GL/glut.h>
+#include <CL/cl.h>
+
+using namespace cv;
+using namespace std;
+
+// OpenGL texture for displaying frames
+GLuint texture;
+VideoCapture cap(0);
+
+void initGL() {
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void display() {
+    Mat frame;
+    cap >> frame;
+    if (frame.empty()) return;
+    
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(-1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, -1);
+        glTexCoord2f(1, 0); glVertex2f(1, 1);
+        glTexCoord2f(0, 0); glVertex2f(-1, 1);
+    glEnd();
+    
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+void reshape(int w, int h) {
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1, 1, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void processFrame(Mat &frame) {
+    // Convert to grayscale
+    Mat gray;
+    cvtColor(frame, gray, COLOR_BGR2GRAY);
+    
+    // Apply Gaussian blur
+    GaussianBlur(gray, gray, Size(5, 5), 0);
+    
+    // Apply Canny edge detection
+    Canny(gray, gray, 50, 150);
+    
+    // Convert back to BGR for OpenGL
+    cvtColor(gray, frame, COLOR_GRAY2BGR);
+}
+
+void displayEnhanced() {
+    Mat frame;
+    cap >> frame;
+    if (frame.empty()) return;
+    
+    processFrame(frame);
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(-1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, -1);
+        glTexCoord2f(1, 0); glVertex2f(1, 1);
+        glTexCoord2f(0, 0); glVertex2f(-1, 1);
+    glEnd();
+    
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+    if (!cap.isOpened()) {
+        cerr << "Error opening camera!" << endl;
+        return -1;
+    }
+    
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(640, 480);
+    glutCreateWindow("OpenGL Enhanced Video Frame");
+    
+    initGL();
+    glutDisplayFunc(displayEnhanced);
+    glutReshapeFunc(reshape);
+    glutMainLoop();
+    return 0;
+}
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <GL/glut.h>
+#include <CL/cl.h>
+
+using namespace cv;
+using namespace std;
+
+// OpenGL texture for displaying frames
+GLuint texture;
+VideoCapture cap(0);
+
+void initGL() {
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void display() {
+    Mat frame;
+    cap >> frame;
+    if (frame.empty()) return;
+    
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(-1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, -1);
+        glTexCoord2f(1, 0); glVertex2f(1, 1);
+        glTexCoord2f(0, 0); glVertex2f(-1, 1);
+    glEnd();
+    
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+void reshape(int w, int h) {
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1, 1, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void processFrame(Mat &frame) {
+    // Convert to grayscale
+    Mat gray;
+    cvtColor(frame, gray, COLOR_BGR2GRAY);
+    
+    // Apply Gaussian blur
+    GaussianBlur(gray, gray, Size(5, 5), 0);
+    
+    // Apply Canny edge detection
+    Canny(gray, gray, 50, 150);
+    
+    // Convert back to BGR for OpenGL
+    cvtColor(gray, frame, COLOR_GRAY2BGR);
+}
+
+void displayEnhanced() {
+    Mat frame;
+    cap >> frame;
+    if (frame.empty()) return;
+    
+    processFrame(frame);
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(-1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, -1);
+        glTexCoord2f(1, 0); glVertex2f(1, 1);
+        glTexCoord2f(0, 0); glVertex2f(-1, 1);
+    glEnd();
+    
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+    if (!cap.isOpened()) {
+        cerr << "Error opening camera!" << endl;
+        return -1;
+    }
+    
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(640, 480);
+    glutCreateWindow("OpenGL Enhanced Video Frame");
+    
+    initGL();
+    glutDisplayFunc(displayEnhanced);
+    glutReshapeFunc(reshape);
+    glutMainLoop();
+    return 0;
+}
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <GL/glut.h>
+#include <CL/cl.h>
+
+using namespace cv;
+using namespace std;
+
+// OpenGL texture for displaying frames
+GLuint texture;
+VideoCapture cap(0);
+
+void initGL() {
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void display() {
+    Mat frame;
+    cap >> frame;
+    if (frame.empty()) return;
+    
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(-1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, -1);
+        glTexCoord2f(1, 0); glVertex2f(1, 1);
+        glTexCoord2f(0, 0); glVertex2f(-1, 1);
+    glEnd();
+    
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+void reshape(int w, int h) {
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1, 1, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void processFrame(Mat &frame) {
+    // Convert to grayscale
+    Mat gray;
+    cvtColor(frame, gray, COLOR_BGR2GRAY);
+    
+    // Apply Gaussian blur
+    GaussianBlur(gray, gray, Size(5, 5), 0);
+    
+    // Apply Canny edge detection
+    Canny(gray, gray, 50, 150);
+    
+    // Convert back to BGR for OpenGL
+    cvtColor(gray, frame, COLOR_GRAY2BGR);
+}
+
+void displayEnhanced() {
+    Mat frame;
+    cap >> frame;
+    if (frame.empty()) return;
+    
+    processFrame(frame);
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(-1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, -1);
+        glTexCoord2f(1, 0); glVertex2f(1, 1);
+        glTexCoord2f(0, 0); glVertex2f(-1, 1);
+    glEnd();
+    
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+    if (!cap.isOpened()) {
+        cerr << "Error opening camera!" << endl;
+        return -1;
+    }
+    
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(640, 480);
+    glutCreateWindow("OpenGL Enhanced Video Frame");
+    
+    initGL();
+    glutDisplayFunc(displayEnhanced);
+    glutReshapeFunc(reshape);
+    glutMainLoop();
+    return 0;
+}
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <GL/glut.h>
+#include <CL/cl.h>
+
+using namespace cv;
+using namespace std;
+
+// OpenGL texture for displaying frames
+GLuint texture;
+VideoCapture cap(0);
+
+void initGL() {
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void display() {
+    Mat frame;
+    cap >> frame;
+    if (frame.empty()) return;
+    
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(-1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, -1);
+        glTexCoord2f(1, 0); glVertex2f(1, 1);
+        glTexCoord2f(0, 0); glVertex2f(-1, 1);
+    glEnd();
+    
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+void reshape(int w, int h) {
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1, 1, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void processFrame(Mat &frame) {
+    // Convert to grayscale
+    Mat gray;
+    cvtColor(frame, gray, COLOR_BGR2GRAY);
+    
+    // Apply Gaussian blur
+    GaussianBlur(gray, gray, Size(5, 5), 0);
+    
+    // Apply Canny edge detection
+    Canny(gray, gray, 50, 150);
+    
+    // Convert back to BGR for OpenGL
+    cvtColor(gray, frame, COLOR_GRAY2BGR);
+}
+
+void displayEnhanced() {
+    Mat frame;
+    cap >> frame;
+    if (frame.empty()) return;
+    
+    processFrame(frame);
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(-1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, -1);
+        glTexCoord2f(1, 0); glVertex2f(1, 1);
+        glTexCoord2f(0, 0); glVertex2f(-1, 1);
+    glEnd();
+    
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+    if (!cap.isOpened()) {
+        cerr << "Error opening camera!" << endl;
+        return -1;
+    }
+    
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(640, 480);
+    glutCreateWindow("OpenGL Enhanced Video Frame");
+    
+    initGL();
+    glutDisplayFunc(displayEnhanced);
+    glutReshapeFunc(reshape);
+    glutMainLoop();
+    return 0;
+}
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <GL/glut.h>
+#include <CL/cl.h>
+
+using namespace cv;
+using namespace std;
+
+// OpenGL texture for displaying frames
+GLuint texture;
+VideoCapture cap(0);
+
+void initGL() {
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void display() {
+    Mat frame;
+    cap >> frame;
+    if (frame.empty()) return;
+    
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(-1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, -1);
+        glTexCoord2f(1, 0); glVertex2f(1, 1);
+        glTexCoord2f(0, 0); glVertex2f(-1, 1);
+    glEnd();
+    
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+void reshape(int w, int h) {
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1, 1, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void processFrame(Mat &frame) {
+    // Convert to grayscale
+    Mat gray;
+    cvtColor(frame, gray, COLOR_BGR2GRAY);
+    
+    // Apply Gaussian blur
+    GaussianBlur(gray, gray, Size(5, 5), 0);
+    
+    // Apply Canny edge detection
+    Canny(gray, gray, 50, 150);
+    
+    // Convert back to BGR for OpenGL
+    cvtColor(gray, frame, COLOR_GRAY2BGR);
+}
+
+void displayEnhanced() {
+    Mat frame;
+    cap >> frame;
+    if (frame.empty()) return;
+    
+    processFrame(frame);
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(-1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, -1);
+        glTexCoord2f(1, 0); glVertex2f(1, 1);
+        glTexCoord2f(0, 0); glVertex2f(-1, 1);
+    glEnd();
+    
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+    if (!cap.isOpened()) {
+        cerr << "Error opening camera!" << endl;
+        return -1;
+    }
+    
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(640, 480);
+    glutCreateWindow("OpenGL Enhanced Video Frame");
+    
+    initGL();
+    glutDisplayFunc(displayEnhanced);
+    glutReshapeFunc(reshape);
+    glutMainLoop();
+    return 0;
+}
+// OpenGL texture for displaying frames
+GLuint texture;
+VideoCapture cap(0);
+
+void initGL() {
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void display() {
+    Mat frame;
+    cap >> frame;
+    if (frame.empty()) return;
+    
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(-1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, -1);
+        glTexCoord2f(1, 0); glVertex2f(1, 1);
+        glTexCoord2f(0, 0); glVertex2f(-1, 1);
+    glEnd();
+    
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+void reshape(int w, int h) {
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1, 1, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void processFrame(Mat &frame) {
+    // Convert to grayscale
+    Mat gray;
+    cvtColor(frame, gray, COLOR_BGR2GRAY);
+    
+    // Apply Gaussian blur
+    GaussianBlur(gray, gray, Size(5, 5), 0);
+    
+    // Apply Canny edge detection
+    Canny(gray, gray, 50, 150);
+    
+    // Convert back to BGR for OpenGL
+    cvtColor(gray, frame, COLOR_GRAY2BGR);
+}
+
+void displayEnhanced() {
+    Mat frame;
+    cap >> frame;
+    if (frame.empty()) return;
+    
+    processFrame(frame);
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame.cols, frame.rows, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 1); glVertex2f(-1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, -1);
+        glTexCoord2f(1, 0); glVertex2f(1, 1);
+        glTexCoord2f(0, 0); glVertex2f(-1, 1);
+    glEnd();
+    
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+    if (!cap.isOpened()) {
+        cerr << "Error opening camera!" << endl;
+        return -1;
+    }
+    
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(640, 480);
+    glutCreateWindow("OpenGL Enhanced Video Frame");
+    
+    initGL();
+    glutDisplayFunc(displayEnhanced);
+    glutReshapeFunc(reshape);
+    glutMainLoop();
+    return 0;
+}
 
 class GLWinApp : public WinApp
 {
