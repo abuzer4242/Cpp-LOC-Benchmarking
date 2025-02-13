@@ -1,1 +1,1 @@
-This is the Medium folder
+OpenCV Background Removal\n\nThis C++ program utilizes OpenCV and CUDA to perform real-time background subtraction using Gaussian Mixture Models (MOG and MOG2). It processes video frames from a file or camera, applies background subtraction, and displays the original frame, foreground mask, and extracted foreground. GPU acceleration enhances performance when available.
